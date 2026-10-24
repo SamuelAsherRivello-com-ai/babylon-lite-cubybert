@@ -1,6 +1,8 @@
 ![Samuel Asher Rivello](qbert-clone/documentation/samuel-asher-rivello-banner.png)
 
-# Qbert Clone
+# Cubybert
+
+[![Cubybert metal logo above an orange hopper on an amber and steel cube pyramid](docs/images/game-logo.png)](docs/game-branding.md)
 
 A complete browser arcade game inspired by Q*bert, rebuilt as an original metal machine. Hop across a 28-tile pyramid, turn every top amber, dodge enemies and ride rescue discs back to the summit. Rendered with **Babylon Lite and WebGPU** in a fixed 9:16 portrait cabinet, surrounded by original metallic artwork.
 
@@ -49,13 +51,13 @@ app://connector_76869538009648d5b282a4bb21c3d157
 
 ## Live Demo
 
-**[Play Qbert Clone](https://samuelasherrivello.github.io/babylon-lite-qbert-clone/)** · [Latest release](https://github.com/SamuelAsherRivello/babylon-lite-qbert-clone/releases/latest)
+**[Play Cubybert](https://samuelasherrivello.github.io/babylon-lite-cubybert/)** · [Latest release](https://github.com/SamuelAsherRivello/babylon-lite-cubybert/releases/latest)
 
 Use a current WebGPU-capable browser with hardware acceleration enabled. Chrome or Edge is recommended. The game reports unavailable graphics adapters and offers a retry; it does not silently substitute another renderer.
 
 ## Images
 
-[![Qbert Clone gameplay](qbert-clone/documentation/screenshot01.png)](qbert-clone/documentation/screenshot01.png)
+[![Cubybert gameplay](qbert-clone/documentation/screenshot01.png)](qbert-clone/documentation/screenshot01.png)
 
 ## Table of Contents
 
