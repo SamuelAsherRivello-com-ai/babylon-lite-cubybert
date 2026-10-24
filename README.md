@@ -51,7 +51,7 @@ app://connector_76869538009648d5b282a4bb21c3d157
 
 ## Live Demo
 
-**[Play Cubybert](https://samuelasherrivello.github.io/babylon-lite-cubybert/)** · [Latest release](https://github.com/SamuelAsherRivello/babylon-lite-cubybert/releases/latest)
+**[Play Cubybert](https://samuelasherrivello-com-ai.github.io/babylon-lite-cubybert/)** · [Latest release](https://github.com/SamuelAsherRivello-com-ai/babylon-lite-cubybert/releases/latest)
 
 Use a current WebGPU-capable browser with hardware acceleration enabled. Chrome or Edge is recommended. The game reports unavailable graphics adapters and offers a retry; it does not silently substitute another renderer.
 
