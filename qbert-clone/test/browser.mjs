@@ -2,7 +2,7 @@ import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
 const base =
-  process.env.TEST_URL || "http://127.0.0.1:5173/babylon-lite-qbert-clone/";
+  process.env.TEST_URL || "http://127.0.0.1:5173/babylon-lite-cubybert/";
 await mkdir("test-results", { recursive: true });
 const browser = await chromium.launch({
   channel: "chromium",
@@ -71,6 +71,13 @@ try {
   await page.getByRole("button", { name: "PLAY AGAIN", exact: true }).click();
   assert.equal((await page.evaluate(() => window.qbert.snapshot())).lives, 3);
   await page.getByRole("button", { name: "Pause game", exact: true }).click();
+  await page.getByRole("button", { name: "HOW TO PLAY ?" }).click();
+  assert.equal(await page.getByRole("link", { name: "SOURCE ↗" }).count(), 1);
+  assert.equal(await page.getByRole("button", { name: "Toggle fullscreen" }).isVisible(), true);
+  assert.equal(await page.locator("#version").isVisible(), true);
+  assert.match(await page.locator("#version").textContent(), /^v\d/);
+  assert.equal(await page.locator(".bottom-right").count(), 0);
+  assert.equal(await page.locator("#gpu-label").count(), 0);
   const sound = page.getByRole("button", { name: "Toggle sound" });
   await sound.click();
   assert.equal(await sound.getAttribute("aria-pressed"), "false");
@@ -80,15 +87,32 @@ try {
     {},
     { timeout: 60000 },
   );
+  await page.getByRole("button", { name: "HOW TO PLAY ?" }).click();
   assert.equal(await sound.getAttribute("aria-pressed"), "false");
   assert.ok(Number(await page.locator("#best").textContent()) >= 75);
   for (const viewport of [
     { width: 390, height: 844 },
     { width: 844, height: 390 },
     { width: 320, height: 568 },
+    { width: 450, height: 1065 },
+    { width: 600, height: 900 },
+    { width: 500, height: 1000 },
   ]) {
     await page.setViewportSize(viewport);
     const boxes = await page.locator(".cabinet").boundingBox();
+    const arena = await page.locator(".arena").boundingBox();
+    const pad = await page.locator(".dpad").boundingBox();
+    const direction = await page.getByRole("button", { name: "Hop lower right" }).boundingBox();
+    assert.ok(Math.abs(pad.width - pad.height) < 1);
+    assert.ok(Math.abs(direction.width - direction.height) < 1);
+    assert.ok(boxes.width / boxes.height >= 0.45 - 0.002);
+    assert.ok(boxes.width / boxes.height <= 0.625 + 0.002);
+    assert.ok(Math.abs(boxes.width - Math.min(viewport.width, viewport.height * 0.625)) < 1);
+    assert.ok(Math.abs(boxes.height - Math.min(viewport.height, viewport.width / 0.45)) < 1);
+    assert.ok(Math.abs(arena.width / arena.height - 1.08) < 0.01);
+    assert.equal(await page.locator(".marquee, .cabinet-bottom").count(), 0);
+    assert.equal(await page.locator(".console h1").innerText(), "QBERTCLONE");
+    assert.equal(await page.getByRole("button", { name: "Hop lower right" }).isVisible(), true);
     assert.ok(
       boxes.x >= 0 &&
         boxes.y >= 0 &&

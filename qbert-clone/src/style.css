@@ -215,8 +215,8 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: min(920px, calc(100dvh - 38px), calc(100vw * 16 / 9 - 16px));
-  aspect-ratio: 9/16;
+  width: min(100vw, calc(100dvh * 0.625));
+  height: min(100dvh, calc(100vw / 0.45));
   background: linear-gradient(
     115deg,
     #56616a,
@@ -246,6 +246,7 @@ a {
   background: #10191f;
   display: flex;
   flex-direction: column;
+  container-type: size;
 }
 .screw {
   position: absolute;
@@ -361,7 +362,10 @@ h1 span {
 .arena {
   position: relative;
   min-height: 0;
-  flex: 1;
+  flex: 0 0 auto;
+  align-self: center;
+  width: min(100%, 70.2cqh);
+  aspect-ratio: 1.08;
   background: #05090f;
 }
 canvas {
@@ -432,11 +436,13 @@ canvas {
   text-shadow: 0 2px 5px #000;
 }
 .console {
-  flex: 0 0 21%;
+  flex: 1 1 0;
+  min-height: 0;
   padding: 3% 7%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  container-type: size;
   border-top: 1px solid #6e828e;
   background:
     repeating-linear-gradient(
@@ -447,6 +453,20 @@ canvas {
       transparent 3px
     ),
     linear-gradient(125deg, #293640, #152129 70%, #33454f);
+}
+.control-copy h1 {
+  font-size: clamp(12px, 4cqw, 28px);
+  white-space: nowrap;
+  margin: 0 0 12px;
+}
+.control-copy {
+  align-self: stretch;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.control-copy h1 span {
+  letter-spacing: 2px;
+  margin-left: 4px;
 }
 .control-copy .eyebrow {
   font-size: 7px;
@@ -478,10 +498,12 @@ canvas {
   margin-left: 3px;
 }
 .dpad {
-  width: 44%;
-  height: 100%;
+  width: min(60cqw, 100cqh);
+  aspect-ratio: 1;
+  flex: none;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 6px;
   touch-action: none;
 }
@@ -654,10 +676,8 @@ body[data-state="playing"] .arena {
 }
 @media (max-width: 650px) {
   .cabinet {
-    height: min(calc(100dvh - 65px), calc((100vw - 12px) * 16 / 9));
     padding: 7px;
     border-radius: 14px;
-    top: calc(50% - 5px);
   }
   .corner.top-left,
   .corner.top-right {
@@ -695,9 +715,6 @@ body[data-state="playing"] .arena {
 @media (max-height: 600px) {
   .side-copy {
     display: none;
-  }
-  .cabinet {
-    height: calc(100dvh - 10px);
   }
   .marquee {
     padding-top: 3%;
@@ -799,4 +816,36 @@ body[data-state="playing"] .arena {
   * {
     scroll-behavior: auto;
   }
+}
+
+.manual-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 auto 10px;
+}
+.manual-actions a,
+.manual-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px 8px;
+  border: 1px solid #71818a;
+  border-radius: 4px;
+  background: #1b2a33;
+  color: #e3eaec;
+  font-size: 9px;
+  letter-spacing: .6px;
+}
+.manual-actions a:hover,
+.manual-actions button:hover {
+  border-color: var(--amber);
+}
+#overlay.manual {
+  overflow-y: auto;
+}
+#overlay.manual .overlay-card {
+  margin: auto;
 }

@@ -29,26 +29,22 @@ document.querySelector("#app").innerHTML = `
   <div class="surround" aria-hidden="true"></div>
   <div id="ui_layer">
     <header class="corner top-left"><span class="brandmark">Q</span><div><strong>Qbert Clone</strong><small>THE METAL EDITION</small></div></header>
-    <nav class="corner top-right"><a href="https://github.com/SamuelAsherRivello/babylon-lite-qbert-clone" target="_blank" rel="noopener">SOURCE <span>↗</span></a></nav>
     <aside class="side-copy left-copy" aria-hidden="true"><span class="eyebrow">PRECISION / PLAY</span><h2>ONE MORE<br>HOP.</h2><div class="rule-line"></div><p>28 surfaces.<br>One electric instinct.</p><span class="serial">SERIES 01 — TITANIUM</span></aside>
     <aside class="side-copy right-copy"><span class="eyebrow">OPERATOR NOTES</span><div class="note"><b>01</b><p>Change every top<br>to <em>amber.</em></p></div><div class="note"><b>02</b><p>Stay one hop ahead<br>of the coil.</p></div><div class="note"><b>03</b><p>Blue discs bring<br>you home.</p></div><div class="mini-pyramid" aria-hidden="true">◇<br>◇ ◇<br>◇ ◇ ◇</div></aside>
-    <div class="corner bottom-left"><button id="sound" aria-label="Toggle sound"></button><button id="fullscreen" aria-label="Toggle fullscreen">⛶ <span>FULLSCREEN</span></button></div>
-    <div class="corner bottom-right"><i></i><span id="gpu-label">INITIALIZING</span><span>v${version}</span></div>
   </div>
   <main class="cabinet" aria-label="Qbert Clone arcade game">
     <div class="screw s1"></div><div class="screw s2"></div><div class="screw s3"></div><div class="screw s4"></div>
     <div class="cabinet-inner">
-      <header class="marquee"><div class="edition">RIVELLO ARCADE <span>№ 001</span></div><h1>QBERT<span>CLONE</span></h1><div class="subtitle"><span></span> HOP. TRANSFORM. SURVIVE. <span></span></div></header>
       <section class="scoreboard" aria-label="Scoreboard"><div><small>SCORE</small><strong id="score">000000</strong></div><div class="best"><small>PERSONAL BEST</small><strong id="best">000000</strong></div><div class="lives-box"><small>LIVES</small><strong id="lives">● ● ●</strong></div></section>
       <section class="arena"><canvas id="game" aria-label="Isometric metal pyramid game board"></canvas>
         <div class="arena-top"><span id="round">LEVEL 01 <b>/ ROUND 01</b></span><button id="pause" aria-label="Pause game" title="Pause (P or Escape)">Ⅱ</button></div>
         <div class="target"><span class="target-chip"></span><span id="target-label">TARGET COLOR</span><strong id="progress">00 / 28</strong></div>
         <div id="notice" aria-live="polite"></div>
-        <div id="overlay"><div class="overlay-card"><div class="overlay-icon">◇</div><span id="overlay-kicker" class="eyebrow">SYSTEM CHECK</span><h2 id="overlay-title">Warming up<br>the metal.</h2><p id="overlay-copy">Initializing the WebGPU engine…</p><button id="primary" class="primary" hidden>LET’S HOP <span>↗</span></button><button id="secondary" class="text-button" hidden>HOW TO PLAY</button></div></div>
+        <div id="overlay"><div class="overlay-card"><div class="overlay-icon">◇</div><span id="overlay-kicker" class="eyebrow">SYSTEM CHECK</span><h2 id="overlay-title">Warming up<br>the metal.</h2><p id="overlay-copy">Initializing the WebGPU engine…</p><div id="manual-actions" class="manual-actions" hidden><a href="https://github.com/SamuelAsherRivello/babylon-lite-qbert-clone" target="_blank" rel="noopener">SOURCE ↗</a><button id="sound" aria-label="Toggle sound"></button><button id="fullscreen" aria-label="Toggle fullscreen">⛶ FULLSCREEN</button><span id="version">v${version}</span></div><button id="primary" class="primary" hidden>LET’S HOP <span>↗</span></button><button id="secondary" class="text-button" hidden>HOW TO PLAY</button></div></div>
       </section>
-      <footer class="console"><div class="control-copy"><span class="eyebrow">MAKE YOUR MOVE</span><p>WASD / ARROW KEYS<br><span>or tap a direction</span></p><button id="help" class="text-button">HOW TO PLAY <span>?</span></button></div><div class="dpad" aria-label="Virtual direction controller">
+      <footer class="console"><div class="control-copy"><h1>QBERT<span>CLONE</span></h1><span class="eyebrow">MAKE YOUR MOVE</span><p>WASD / ARROW KEYS<br><span>or tap a direction</span></p><button id="help" class="text-button">HOW TO PLAY <span>?</span></button></div><div class="dpad" aria-label="Virtual direction controller">
         <button data-dir="ul" aria-label="Hop upper left" title="W / Up">↖<small>W ↑</small></button><button data-dir="ur" aria-label="Hop upper right" title="D / Right">↗<small>D →</small></button><button data-dir="dl" aria-label="Hop lower left" title="A / Left">↙<small>A ←</small></button><button data-dir="dr" aria-label="Hop lower right" title="S / Down">↘<small>S ↓</small></button>
-      </div></footer><div class="cabinet-bottom">WEBGPU <span>•</span> BABYLON LITE <span>•</span> ORIGINAL METALWORK</div>
+      </div></footer>
     </div>
   </main>`;
 const $ = (s) => document.querySelector(s);
@@ -119,11 +115,6 @@ function update(error) {
   $("#sound").innerHTML =
     `${muted ? "◌" : "◖"} <span>SOUND ${muted ? "OFF" : "ON"}</span>`;
   $("#sound").setAttribute("aria-pressed", String(!muted));
-  $("#gpu-label").textContent = loaded
-    ? "WEBGPU ONLINE"
-    : errorMessage
-      ? "WEBGPU REQUIRED"
-      : "INITIALIZING";
   const key = errorMessage
     ? "error"
     : !loaded
@@ -191,6 +182,7 @@ function update(error) {
     $("#secondary").hidden = !secondary;
     $("#secondary").textContent = secondary || "";
     $("#overlay").classList.toggle("manual", key === "help");
+    $("#manual-actions").hidden = key !== "help";
   }
   while (game.events.length) sound(game.events.shift());
   document.body.dataset.state = key;
@@ -289,7 +281,8 @@ window.addEventListener("keydown", (event) => {
     else game.pause();
     update();
   }
-  if ((key === "Enter" || key === " ") && !$("#primary").hidden) {
+  if ((key === "Enter" || key === " ") && !$("#primary").hidden &&
+      !(event.target instanceof HTMLElement && event.target.closest("button, a"))) {
     event.preventDefault();
     $("#primary").click();
   }
